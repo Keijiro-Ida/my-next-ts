@@ -13,6 +13,7 @@ export default function BooksLayout({ children }: Props) {
   const txtKeyword = useRef<HTMLInputElement>(null);
 
   const handleSearch = () => {
+
     if (txtKeyword.current) {
       router.push(`/books/${txtKeyword.current.value}`);
     }

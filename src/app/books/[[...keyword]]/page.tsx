@@ -1,5 +1,9 @@
 import LinkedBookDetails from '@/components/LinkedBookDetails';
 import { getBooksByKeyword } from '@/lib/getter';
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 
 type Props = {
   params: {
@@ -9,8 +13,12 @@ type Props = {
 
 export default async function BookResult({ params: { keyword = 'React'} }: Props) {
 
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/login");
+  }
   const books = await getBooksByKeyword(keyword);
-  console.log(books);
+
   return (
     <>
       {books.map((b, i) => (
