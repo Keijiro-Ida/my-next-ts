@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import AuthMenu from "@/components/AuthMenu";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,26 +26,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-
-        <h1 className="text-4xl text-indigo-800 font-bold my-2">Reading Recorder</h1>
-        <ul className="flex bg-blue-600 mb-4 pl-2">
-          <li className="block px-4 py-2 my-1 hover:bg-grey-100 rounded">
-            <Link className="no-underline text-blue-300" href="/">Home</Link>
-          </li>
-          <li className="block text-blue-300 px-4 py-2 my-1 hover:bg-grey-100 rounded">
-            <Link className="no-underline text-blue-300" href="/books">Search</Link>
-          </li>
-          <li className="block text-blue-300 px-4 py-2 my-1 hover:bg-grey-100 rounded">
-            <Link className="no-underline text-blue-300" href="https://wings.msn.to/" target="_blank">Support</Link>
-          </li>
-        </ul>
-
-        <div className="ml-2">
-          {children}
-        </div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+         <Providers>
+          <h1 className="text-4xl text-indigo-800 font-bold my-2">Reading Recorder</h1>
+          <AuthMenu />
+          <div className="ml-2">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

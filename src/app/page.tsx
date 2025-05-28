@@ -12,12 +12,14 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
+    console.log("ログインしていません。");
     redirect("/login");
   }
-
+  console.log("レビューを取得中...");
   const reviews: Review[] | null = await getAllReviews();
 
-  if (!reviews) {
+  if (!reviews || reviews.length === 0) {
+
     return <div>レビューがありません。</div>;
   }
 

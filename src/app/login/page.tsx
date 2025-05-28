@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -45,7 +46,13 @@ export default function LoginPage() {
         required
       />
       {error && <div className="text-red-500 mb-2">{error}</div>}
+
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">ログイン</button>
+
+      <div className="mt-4">
+        <Link href="/signup" className="text-blue-600 underline">新規登録はこちら</Link>
+      </div>
     </form>
+
   );
 }
