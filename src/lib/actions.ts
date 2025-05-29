@@ -9,6 +9,13 @@ const prisma = new PrismaClient();
 export async function addReview(data: FormData) {
     const book = await getBookById(data.get('id') as string);
 
+    const email = data.get('email') as string;
+    const user = await prisma.user.findUnique({
+        where: { email: email },
+        select: { id: true }
+    });
+
+
     const input = {
         title: book.title,
         author: book.author,
@@ -18,6 +25,7 @@ export async function addReview(data: FormData) {
         image: book.image,
         read: new Date(data.get('read') as string),
         memo: data.get('memo') as string,
+        userId: user?.id || '',
     };
 
     await prisma.review.upsert({

@@ -67,3 +67,30 @@ export async function getAllReviews(): Promise<Review[] | null> {
     }
   });
 }
+
+export async function getReviewsByEmail(email: string): Promise<Review[] | null> {
+
+  if (!email) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email
+    }
+  });
+  if (!user || !user.id) {
+    return null;
+  }
+
+  const userId = user.id;
+
+  return await prisma.review.findMany({
+    where: {
+      userId: userId
+    },
+    orderBy: {
+      read: 'desc'
+    }
+  });
+}

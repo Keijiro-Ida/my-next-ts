@@ -7,16 +7,18 @@ type Props = {
     id: string;
     read: string;
     memo: string;
+    email: string;
   };
 };
 
-export default function FormEdit({ src: { id, read, memo } }: Props) {
+export default function FormEdit({ src: { id, read, memo, email } }: Props) {
   const [, startTransition] = useTransition();
 
   return (
     <form action={addReview}>
       <input type="hidden" name="id" defaultValue={id} />
       <div className="mb-3">
+        <input type="hidden" name="email" defaultValue={email} />
         <label className="font-bold" htmlFor="read">読了日：</label>
         <input
           type="date"

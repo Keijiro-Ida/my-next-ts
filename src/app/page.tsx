@@ -1,4 +1,4 @@
-import { getAllReviews } from "@/lib/getter";
+import { getReviewsByEmail } from "@/lib/getter";
 import LinkedBookDetails from "@/components/LinkedBookDetails";
 import { Review } from "../generated/prisma/client";
 import { getServerSession } from "next-auth";
@@ -16,7 +16,8 @@ export default async function Home() {
     redirect("/login");
   }
   console.log("レビューを取得中...");
-  const reviews: Review[] | null = await getAllReviews();
+
+  const reviews: Review[] | null = await getReviewsByEmail(session.user?.email || "");
 
   if (!reviews || reviews.length === 0) {
 

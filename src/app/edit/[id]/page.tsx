@@ -27,7 +27,7 @@ export default async function EditPage({ params }: Props) {
         <div id="form">
             <BookDetails book={book} />
             <hr />
-            <FormEdit src={{id: book.id, read, memo:review?.memo ?? ""}} />
+            <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? ""}} />
         </div>
     )
 }
