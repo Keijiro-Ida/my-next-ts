@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 type Book = {
-  image: string;
+  image: string | null;
   title: string;
   price: number;
   author: string;
@@ -19,7 +19,7 @@ export default function BookDetails({ index, book }: Props) {
     <div className="flex w-full mb-4">
       <div>
         <Image
-          src={book.image}
+          src={book.image ? book.image : '/vercel.svg'}
           alt=""
           width={140}
           height={180}

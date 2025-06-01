@@ -52,10 +52,16 @@ export async function getBookById(id: string) {
   return createBook(result);
 }
 
-export async function getReviewById(id: string): Promise<Review | null> {
+export async function getReviewById(id: string,email: string): Promise<Review | null> {
+  console.log("getReviewById called with id:", id, "and email:", email);
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) return null;
   return await prisma.review.findUnique({
-    where: {
-      id: id
+     where: {
+      userId_bookId: {
+        userId: user.id,
+        bookId: id,
+      }
     }
   });
 }
@@ -91,6 +97,9 @@ export async function getReviewsByEmail(email: string): Promise<Review[] | null>
     },
     orderBy: {
       read: 'desc'
+    },
+    include: {
+      book: true
     }
   });
 }

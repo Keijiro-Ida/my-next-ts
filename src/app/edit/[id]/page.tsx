@@ -18,9 +18,11 @@ export default async function EditPage({ params }: Props) {
   if (!session) {
     redirect("/login");
   }
+  console.log(session.user);
+  const email = session.user?.email;
 
-  const book = await getBookById(params.id);
-    const review = await getReviewById(params.id);
+    const book = await getBookById(params.id);
+    const review = await getReviewById(params.id, email);
     const read = (review?.read || new Date()).toLocaleDateString('sv-SE');
 
     return (

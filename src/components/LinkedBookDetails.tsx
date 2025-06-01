@@ -3,7 +3,7 @@ import BookDetails from './BookDetails';
 
 type Book = {
   id: number | string;
-  image: string;
+  image: string | null;
   title: string;
   price: number;
   author: string;

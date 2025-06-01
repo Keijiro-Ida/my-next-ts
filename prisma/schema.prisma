@@ -12,17 +12,16 @@ datasource db {
 }
 
 model Review {
-  id        String    @id
-  title     String
-  author    String
-  price     Int
-  publisher String
-  published String
-  image     String
-  read      DateTime  @default(now())
-  memo      String
+  id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  bookId    String
+  memo      String
+  read      DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+  book      Book @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
 }
 
 model User {
@@ -30,4 +29,29 @@ model User {
   email    String   @unique
   password String
   reviews  Review[]
+  readingList ReadingList[]
+}
+
+model Book {
+  id        String   @id         // Google Book ID
+  title     String
+  author    String
+  image     String?
+  price     Float
+  publisher  String
+  published  String
+  reviews   Review[]
+  readingList ReadingList[]
+}
+
+model ReadingList {
+  id        String   @id @default(cuid())
+  userId    String
+  bookId    String
+  addedAt   DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+  book      Book @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
 }

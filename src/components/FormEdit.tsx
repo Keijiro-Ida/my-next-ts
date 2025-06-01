@@ -48,7 +48,7 @@ export default function FormEdit({ src: { id, read, memo, email } }: Props) {
         type="button"
         className="bg-red-600 text-white rounded px-4 py-2 hover:bg-red-500"
         onClick={() => {
-          startTransition(() => removeReview(id));
+          startTransition(() => removeReview(id, email));
         }}
       >
         削除

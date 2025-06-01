@@ -1,6 +1,6 @@
 import { getReviewsByEmail } from "@/lib/getter";
 import LinkedBookDetails from "@/components/LinkedBookDetails";
-import { Review } from "../generated/prisma/client";
+import { Review, Book } from "../generated/prisma/client";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -17,7 +17,7 @@ export default async function Home() {
   }
   console.log("レビューを取得中...");
 
-  const reviews: Review[] | null = await getReviewsByEmail(session.user?.email || "");
+  const reviews = await getReviewsByEmail(session.user?.email || "") as (Review & { book: Book })[];
 
   if (!reviews || reviews.length === 0) {
 
@@ -26,8 +26,8 @@ export default async function Home() {
 
   return (
       <>
-      {reviews.map((b, i) => (
-        <LinkedBookDetails book={b} index={i + 1} key={b.id} />
+      {reviews.map((review, i) => (
+        <LinkedBookDetails book={review.book} index={i + 1} key={review.id} />
       ))}
     </>
   );
