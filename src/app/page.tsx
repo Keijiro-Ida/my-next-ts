@@ -27,7 +27,7 @@ export default async function Home() {
   return (
       <>
       {reviews.map((review, i) => (
-        <LinkedBookDetails book={review.book} index={i + 1} key={review.id} />
+        <LinkedBookDetails review={review} book={review.book} index={i + 1} key={review.id} />
       ))}
     </>
   );

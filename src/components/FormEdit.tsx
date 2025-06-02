@@ -1,4 +1,5 @@
 "use client";
+import React from 'react';
 import { addReview, removeReview } from '@/lib/actions';
 import { useTransition } from 'react';
 
@@ -8,10 +9,11 @@ type Props = {
     read: string;
     memo: string;
     email: string;
+    rating?: number;
   };
 };
 
-export default function FormEdit({ src: { id, read, memo, email } }: Props) {
+export default function FormEdit({ src: { id, read, memo, email, rating } }: Props) {
   const [, startTransition] = useTransition();
 
   return (
@@ -27,6 +29,29 @@ export default function FormEdit({ src: { id, read, memo, email } }: Props) {
           className="block bg-gray-100 border-2 border-gray-600 rounded focus:bg-white focus:outline-none focus:border-red-500"
           defaultValue={read}
         />
+      </div>
+      <div className="mb-3">
+        <label className="font-bold block mb-1">評価：</label>
+        <div className="flex flex-row-reverse justify-end">
+          {[5, 4, 3, 2, 1].map((star) => (
+            <React.Fragment key={star}>
+              <input
+                type="radio"
+                id={`star${star}`}
+                name="rating"
+                value={star}
+                className="hidden peer"
+                defaultChecked={Number(rating) === star}
+              />
+              <label
+                htmlFor={`star${star}`}
+                className="cursor-pointer text-2xl text-gray-300 peer-checked:text-yellow-400"
+              >
+                ★
+              </label>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
       <div className="mb-3">
         <label className="font-bold" htmlFor="memo">感想：</label>

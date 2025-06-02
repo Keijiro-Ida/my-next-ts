@@ -15,14 +15,14 @@ export default async function ReadingList() {
     console.log("ログインしていません。");
     redirect("/login");
   }
-  console.log("レビューを取得中...");
+  console.log("ほしい本リストを取得中...");
 
   const readingLists = await getReadingListByEmail(session.user?.email || "") as (ReadingList & { book: Book })[];
 
 
   if (!readingLists || readingLists.length === 0) {
 
-    return <div>レビューがありません。</div>;
+    return <div>欲しい本がありません。</div>;
   }
 
   return (

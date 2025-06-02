@@ -25,12 +25,12 @@ export default async function EditPage({ params }: Props) {
     const review = await getReviewById(params.id, email);
     const read = (review?.read || new Date()).toLocaleDateString('sv-SE');
     const isInReadingList = await getIsInReadingList(params.id, email);
-
+    console.log(review?.rating);
     return (
         <div id="form">
             <BookDetails book={book} email={email} isInReadingList={isInReadingList}/>
             <hr />
-            <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? ""}} />
+            <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? "", rating: review?.rating ?? null }} />
         </div>
     )
 }

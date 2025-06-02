@@ -41,6 +41,7 @@ export async function addReview(data: FormData) {
         bookId: bookId,
         read: new Date(data.get('read') as string),
         memo: data.get('memo') as string,
+        rating: data.get('rating') ? Number(data.get('rating')) : null,
         userId: user?.id || '',
     };
 

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
+  const { email, password, name } = await req.json();
 
   console.log('Received signup request:', { email, password });
   // 既存ユーザーのチェック
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
     data: {
       email,
       password: hashedPassword,
+      name: name || '',
     },
   });
 

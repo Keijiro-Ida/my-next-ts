@@ -1,25 +1,18 @@
 "use client";
 import Image from 'next/image';
 import { useState } from "react";
+import type { Book, Review } from "@/generated/prisma/client";
 
-type Book = {
-  id: string;
-  image: string | null;
-  title: string;
-  price: number;
-  author: string;
-  publisher: string;
-  published: string;
-};
 
 type Props = {
   index?: number;
   book: Book;
   email?: string;
   isInReadingList?: boolean;
+  review?: Review & { book: Book; user?: { name?: string } }
 };
 
-export default function BookDetails({ index, book, email, isInReadingList }: Props) {
+export default function BookDetails({ index, book, email, isInReadingList, review }: Props) {
   const [inList, setInList] = useState(isInReadingList);
 
   const handleAddOrRemoveReadingList = async () => {
@@ -63,6 +56,31 @@ export default function BookDetails({ index, book, email, isInReadingList }: Pro
           <li>出版社: {book.publisher}</li>
           <li>出版日: {book.published}</li>
         </ul>
+        {review && review.user?.name && (
+          <div className="text-sm text-gray-500">
+            by {review.user.name}
+          </div>
+        )}
+        {review && (
+          <div className="mt-2">
+            {/* レーティング（星） */}
+            {typeof review.rating === "number" && (
+              <div>
+                評価:{" "}
+                {Array.from({ length: review.rating }).map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-xl">★</span>
+                ))}
+              </div>
+            )}
+            {/* レビュー（20字まで） */}
+            {review.memo && (
+              <div className="text-gray-700 mt-1">
+                感想: {review.memo.slice(0, 20)}
+                {review.memo.length > 20 && "…"}
+              </div>
+            )}
+          </div>
+        )}
         {email && (
           <button
             type="button"

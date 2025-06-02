@@ -72,7 +72,8 @@ export async function getAllReviews(): Promise<Review[] | null> {
       read: 'desc'
     },
     include: {
-      book: true
+      book: true,
+      user: true
     }
   });
 }

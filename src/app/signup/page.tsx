@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
 
@@ -15,7 +16,7 @@ export default function Signup() {
         console.log('Signup request:', { email, password });
         const res = await fetch('/api/signup', {
         method: 'POST',
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, name }),
             headers: { 'Content-Type': 'application/json' }
         });
         if (res.ok) {
@@ -28,6 +29,14 @@ export default function Signup() {
     return (
         <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-10">
             <h2 className="text-xl mb-4">サインアップ</h2>
+            <input
+                type="text"
+                placeholder="名前"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="block w-full mb-2 p-2 border"
+                required
+            />
             <input
                 type="email"
                 placeholder="メールアドレス"
@@ -44,6 +53,7 @@ export default function Signup() {
                 className="block w-full mb-2 p-2 border"
                 required
             />
+
             {error && <div className="text-red-500 mb-2">{error}</div>}
             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">登録</button>
         </form>
