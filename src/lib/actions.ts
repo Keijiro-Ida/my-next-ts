@@ -77,7 +77,7 @@ export async function removeReview(id: string, email: string) {
     redirect('/');
 }
 
-async function createBook(book: {
+export async function createBook(book: {
   id: string;
   title: string;
   author: string;

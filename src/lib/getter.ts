@@ -1,5 +1,5 @@
 import { PrismaClient } from '../generated/prisma/client';
-import { Review } from '../generated/prisma/client';
+import { Review, ReadingList } from '../generated/prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -97,6 +97,53 @@ export async function getReviewsByEmail(email: string): Promise<Review[] | null>
     },
     orderBy: {
       read: 'desc'
+    },
+    include: {
+      book: true
+    }
+  });
+}
+
+export async function getIsInReadingList(id: string, email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { email: email },
+    select: { id: true }
+  });
+  if (!user) {
+    return false;
+  }
+  const readingList = await prisma.readingList.findUnique({
+    where: {
+      userId_bookId: {
+        userId: user.id,
+        bookId: id
+      }
+    }
+  });
+  return !!readingList;
+}
+
+
+export async function getReadingListByEmail(email: string): Promise<ReadingList[] | null> {
+
+  if (!email) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email
+    }
+  });
+  if (!user || !user.id) {
+    return null;
+  }
+
+  const userId = user.id;
+
+  return await prisma.readingList.findMany({
+    where: {
+      userId: userId
     },
     include: {
       book: true

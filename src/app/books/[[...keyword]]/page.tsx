@@ -22,7 +22,7 @@ export default async function BookResult({ params: { keyword = 'React'} }: Props
   return (
     <>
       {books.map((b, i) => (
-        <LinkedBookDetails book={b} index={i + 1} key={b.id} />
+        <LinkedBookDetails book={b} index={i + 1} key={b.id} email={session.email} />
       ))}
     </>
   );

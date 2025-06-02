@@ -1,6 +1,6 @@
 import BookDetails from '@/components/BookDetails';
 import FormEdit from '@/components/FormEdit';
-import { getBookById, getReviewById } from '@/lib/getter';
+import { getBookById, getReviewById, getIsInReadingList } from '@/lib/getter';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -24,10 +24,11 @@ export default async function EditPage({ params }: Props) {
     const book = await getBookById(params.id);
     const review = await getReviewById(params.id, email);
     const read = (review?.read || new Date()).toLocaleDateString('sv-SE');
+    const isInReadingList = await getIsInReadingList(params.id, email);
 
     return (
         <div id="form">
-            <BookDetails book={book} />
+            <BookDetails book={book} email={email} isInReadingList={isInReadingList}/>
             <hr />
             <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? ""}} />
         </div>

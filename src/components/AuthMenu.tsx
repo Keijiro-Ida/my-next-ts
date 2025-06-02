@@ -18,7 +18,10 @@ export default function AuthMenu() {
         <Link className="no-underline text-blue-300" href="/books">Search</Link>
       </li>
       <li className="block text-blue-300 px-4 py-2 my-1 hover:bg-grey-100 rounded">
-        <Link className="no-underline text-blue-300" href="https://wings.msn.to/" target="_blank">Support</Link>
+        <Link className="no-underline text-blue-300" href="/me/reading-list" target="_blank">ほしい本リスト</Link>
+      </li>
+      <li className="block text-blue-300 px-4 py-2 my-1 hover:bg-grey-100 rounded">
+        <Link className="no-underline text-blue-300" href="/me/reviews" target="_blank">レビュー一覧</Link>
       </li>
       <li className="block text-blue-300 px-4 py-2 my-1 hover:bg-grey-100 rounded">
         <LogoutButton />
