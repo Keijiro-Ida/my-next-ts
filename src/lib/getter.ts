@@ -70,6 +70,9 @@ export async function getAllReviews(): Promise<Review[] | null> {
   return await prisma.review.findMany({
     orderBy: {
       read: 'desc'
+    },
+    include: {
+      book: true
     }
   });
 }

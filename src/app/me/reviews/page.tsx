@@ -1,13 +1,13 @@
-import { getReadingListByEmail } from "@/lib/getter";
+import { getReviewsByEmail } from "@/lib/getter";
 import LinkedBookDetails from "@/components/LinkedBookDetails";
-import type { ReadingList, Book } from "@/generated/prisma/client";
+import { Review, Book } from "@/generated/prisma/client";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const dynamic = "force-dynamic";
 
-export default async function ReadingList() {
+export default async function Home() {
 
   const session = await getServerSession(authOptions);
 
@@ -17,18 +17,17 @@ export default async function ReadingList() {
   }
   console.log("レビューを取得中...");
 
-  const readingLists = await getReadingListByEmail(session.user?.email || "") as (ReadingList & { book: Book })[];
+  const reviews = await getReviewsByEmail(session.user?.email || "") as (Review & { book: Book })[];
 
-
-  if (!readingLists || readingLists.length === 0) {
+  if (!reviews || reviews.length === 0) {
 
     return <div>レビューがありません。</div>;
   }
 
   return (
       <>
-      {readingLists.map((readingList, i) => (
-        <LinkedBookDetails book={readingList.book} index={i + 1} key={readingList.id} />
+      {reviews.map((review, i) => (
+        <LinkedBookDetails book={review.book} index={i + 1} key={review.id} />
       ))}
     </>
   );

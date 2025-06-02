@@ -47,3 +47,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  console.log("deleteReadingList called");
+  const { bookId, email } = await req.json();
+  const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+
+  if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+  await prisma.readingList.delete({
+    where: {
+      userId_bookId: {
+        userId: user.id,
+        bookId: bookId,
+      }
+    }
+  });
+
+  return NextResponse.json({ ok: true });
+}
