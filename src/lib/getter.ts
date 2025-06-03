@@ -103,7 +103,8 @@ export async function getReviewsByEmail(email: string): Promise<Review[] | null>
       read: 'desc'
     },
     include: {
-      book: true
+      book: true,
+      user: true
     }
   });
 }
