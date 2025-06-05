@@ -17,12 +17,17 @@ export default async function BookResult({ params: { keyword = 'React'} }: Props
   if (!session) {
     redirect("/login");
   }
+
+  const userId = session.user?.id;
+  if (!userId) {
+    redirect("/login");
+  }
   const books = await getBooksByKeyword(keyword);
 
   return (
     <>
       {books.map((b, i) => (
-        <LinkedBookDetails book={b} index={i + 1} key={b.id} email={session.email} />
+        <LinkedBookDetails book={b} index={i + 1} key={b.id} userId={userId} />
       ))}
     </>
   );

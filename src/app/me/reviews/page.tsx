@@ -1,7 +1,7 @@
 import { getReviewsByEmail } from "@/lib/getter";
 import LinkedBookDetails from "@/components/LinkedBookDetails";
-import { Review, Book, User } from "@/generated/prisma/client";
-import { getServerSession } from "next-auth";
+import { Review, Book, User, Like } from "@/generated/prisma/client";
+import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -12,12 +12,13 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    console.log("ログインしていません。");
     redirect("/login");
   }
-  console.log("レビューを取得中...");
 
-  const reviews = await getReviewsByEmail(session.user?.email || "") as (Review & { book: Book, user: User })[];
+  const userId = session.user?.id;
+
+  const reviews = await getReviewsByEmail(session.user?.email || "") as (Review & { book: Book, user: User, likes: Like[] })[];
+
 
   if (!reviews || reviews.length === 0) {
 
@@ -27,7 +28,7 @@ export default async function Home() {
   return (
       <>
       {reviews.map((review, i) => (
-        <LinkedBookDetails book={review.book} index={i + 1} key={review.id} review={review} />
+        <LinkedBookDetails book={review.book} index={i + 1} key={review.id} review={review} userId={userId}/>
       ))}
     </>
   );

@@ -52,14 +52,12 @@ export async function getBookById(id: string) {
   return createBook(result);
 }
 
-export async function getReviewById(id: string,email: string): Promise<Review | null> {
-  console.log("getReviewById called with id:", id, "and email:", email);
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return null;
+export async function getReviewById(id: string,userId: string): Promise<Review | null> {
+
   return await prisma.review.findUnique({
      where: {
       userId_bookId: {
-        userId: user.id,
+        userId: userId,
         bookId: id,
       }
     }
@@ -73,7 +71,8 @@ export async function getAllReviews(): Promise<Review[] | null> {
     },
     include: {
       book: true,
-      user: true
+      user: true,
+      likes: true
     }
   });
 }
@@ -104,23 +103,18 @@ export async function getReviewsByEmail(email: string): Promise<Review[] | null>
     },
     include: {
       book: true,
-      user: true
+      user: true,
+      likes: true
     }
   });
 }
 
-export async function getIsInReadingList(id: string, email: string): Promise<boolean> {
-  const user = await prisma.user.findUnique({
-    where: { email: email },
-    select: { id: true }
-  });
-  if (!user) {
-    return false;
-  }
+export async function getIsInReadingList(id: string, userId: string): Promise<boolean> {
+
   const readingList = await prisma.readingList.findUnique({
     where: {
       userId_bookId: {
-        userId: user.id,
+        userId: userId,
         bookId: id
       }
     }

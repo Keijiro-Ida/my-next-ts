@@ -18,19 +18,21 @@ export default async function EditPage({ params }: Props) {
   if (!session) {
     redirect("/login");
   }
-  console.log(session.user);
-  const email = session.user?.email;
+  const userId = session.user?.id;
+  if (!userId) {
+    redirect("/login");
+}
 
-    const book = await getBookById(params.id);
-    const review = await getReviewById(params.id, email);
-    const read = (review?.read || new Date()).toLocaleDateString('sv-SE');
-    const isInReadingList = await getIsInReadingList(params.id, email);
-    console.log(review?.rating);
-    return (
-        <div id="form">
-            <BookDetails book={book} email={email} isInReadingList={isInReadingList}/>
-            <hr />
-            <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? "", rating: review?.rating ?? null }} />
-        </div>
-    )
+  const book = await getBookById(params.id);
+  const review = await getReviewById(params.id, userId);
+  const read = (review?.read || new Date()).toLocaleDateString('sv-SE');
+  const isInReadingList = await getIsInReadingList(params.id, userId);
+  console.log(review?.rating);
+  return (
+      <div id="form">
+          <BookDetails book={book} userId={userId} isInReadingList={isInReadingList}/>
+          <hr />
+          <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? "", rating: review?.rating ?? null }} />
+      </div>
+  )
 }

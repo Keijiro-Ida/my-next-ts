@@ -1,7 +1,7 @@
 import { getAllReviews } from "@/lib/getter";
 import LinkedBookDetails from "@/components/LinkedBookDetails";
 import { Review, Book } from "../generated/prisma/client";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -12,10 +12,10 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    console.log("ログインしていません。");
     redirect("/login");
   }
-  console.log("レビューを取得中...");
+
+  const userId = session.user?.id;
 
   const reviews = await getAllReviews() as (Review & { book: Book })[];
 
@@ -27,7 +27,7 @@ export default async function Home() {
   return (
       <>
       {reviews.map((review, i) => (
-        <LinkedBookDetails review={review} book={review.book} index={i + 1} key={review.id} />
+        <LinkedBookDetails review={review} book={review.book} index={i + 1} key={review.id} userId={userId}/>
       ))}
     </>
   );

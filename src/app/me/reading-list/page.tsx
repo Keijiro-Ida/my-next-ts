@@ -12,10 +12,8 @@ export default async function ReadingList() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    console.log("ログインしていません。");
     redirect("/login");
   }
-  console.log("ほしい本リストを取得中...");
 
   const readingLists = await getReadingListByEmail(session.user?.email || "") as (ReadingList & { book: Book })[];
 

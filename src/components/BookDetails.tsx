@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
-import { useState } from "react";
-import type { Book, Review } from "@/generated/prisma/client";
+import { useState, useEffect } from "react";
+import type { Book, Review, User, Like } from "@/generated/prisma/client";
 
 
 type Props = {
@@ -9,19 +9,56 @@ type Props = {
   book: Book;
   email?: string;
   isInReadingList?: boolean;
-  review?: Review & { book: Book; user?: { name?: string } }
+  review?: Review & { book: Book; user?: User, likes?: Like[] };
+  userId?: string;
 };
 
-export default function BookDetails({ index, book, email, isInReadingList, review }: Props) {
+export default function BookDetails({ index, book,isInReadingList, review, userId }: Props) {
   const [inList, setInList] = useState(isInReadingList);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(review?.likes?.length || 0);
 
+  useEffect(() => {
+  if (review?.likes && userId) {
+      setLiked(review.likes.some(like => like.userId === userId));
+    }
+  }, [review, userId]);
+
+
+  const handleLike = async () => {
+
+    if (!userId || !review) return;
+    if (liked) {
+      // いいね解除
+      const res = await fetch('/api/like', {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviewId: review.id, userId }),
+      });
+      if (res.ok) {
+        setLiked(false);
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      // いいね
+      const res = await fetch('/api/like', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviewId: review.id, userId }),
+      });
+      if (res.ok) {
+        setLiked(true);
+        setLikeCount(likeCount + 1);
+      }
+    }
+  };
   const handleAddOrRemoveReadingList = async () => {
 
     if (inList) {
       const res = await fetch('/api/reading-list', {
         method: 'DELETE',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookId: book.id, email }),
+        body: JSON.stringify({ bookId: book.id, userId }),
       });
 
       if (res.ok) setInList(false);
@@ -30,7 +67,7 @@ export default function BookDetails({ index, book, email, isInReadingList, revie
       const res = await fetch('/api/reading-list', {
         method: 'POST',
         headers: {"Content-Type": "application/json" },
-        body: JSON.stringify({ book: book, email }),
+        body: JSON.stringify({ book: book, userId }),
       });
 
      if (res.ok) {
@@ -79,9 +116,20 @@ export default function BookDetails({ index, book, email, isInReadingList, revie
                 {review.memo.length > 20 && "…"}
               </div>
             )}
+            <button
+              type="button"
+              onClick={ e => {
+              e.preventDefault();
+              handleLike()}
+              }
+              className="flex items-center mt-1 focus:outline-none"
+            >
+              <span className={liked ? "text-pink-500 text-xl mr-1" : "text-gray-500 text-xl mr-1"}>♥</span>
+              <span className="text-gray-700">{likeCount}</span>
+            </button>
           </div>
         )}
-        {email && (
+        {userId && (
           <button
             type="button"
             onClick={handleAddOrRemoveReadingList}

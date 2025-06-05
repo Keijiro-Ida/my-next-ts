@@ -9,7 +9,7 @@ type Props = {
     read: string;
     memo: string;
     email: string;
-    rating?: number;
+    rating: number | null;
   };
 };
 
