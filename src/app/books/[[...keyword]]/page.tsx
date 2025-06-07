@@ -11,7 +11,9 @@ type Props = {
   };
 };
 
-export default async function BookResult({ params: { keyword = 'React'} }: Props) {
+export default async function BookResult({ params }: Props) {
+
+  const keyword = params.keyword ?? 'React'
 
   const session = await getServerSession(authOptions);
   if (!session) {
