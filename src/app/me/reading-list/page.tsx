@@ -3,7 +3,7 @@ import LinkedBookDetails from "@/components/LinkedBookDetails";
 import type { ReadingList, Book } from "@/generated/prisma/client";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 export const dynamic = "force-dynamic";
 

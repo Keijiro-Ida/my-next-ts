@@ -3,7 +3,7 @@ import FormEdit from '@/components/FormEdit';
 import { getBookById, getReviewById, getIsInReadingList } from '@/lib/getter';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 
 type Props = {

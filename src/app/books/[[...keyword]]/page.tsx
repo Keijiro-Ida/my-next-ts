@@ -2,7 +2,7 @@ import LinkedBookDetails from '@/components/LinkedBookDetails';
 import { getBooksByKeyword } from '@/lib/getter';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 
 type Props = {
