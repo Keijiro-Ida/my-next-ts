@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   const { email, password, name } = await req.json();
 
-  console.log('Received signup request:', { email, password });
   // 既存ユーザーのチェック
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {

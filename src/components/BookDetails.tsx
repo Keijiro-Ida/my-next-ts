@@ -11,9 +11,10 @@ type Props = {
   isInReadingList?: boolean;
   review?: Review & { book: Book; user?: User, likes?: Like[] };
   userId?: string;
+  showReadingListButton?: boolean;
 };
 
-export default function BookDetails({ index, book,isInReadingList, review, userId }: Props) {
+export default function BookDetails({ index, book,isInReadingList, review, userId, showReadingListButton}: Props) {
   const [inList, setInList] = useState(isInReadingList);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(review?.likes?.length || 0);
@@ -129,7 +130,7 @@ export default function BookDetails({ index, book,isInReadingList, review, userI
             </button>
           </div>
         )}
-        {userId && (
+        {showReadingListButton && (
           <button
             type="button"
             onClick={handleAddOrRemoveReadingList}

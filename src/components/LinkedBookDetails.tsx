@@ -11,13 +11,14 @@ type Props = {
   review?: Review & { book: Book; user?: User, likes?: Like[]};
   userId?: string;
   isInReadingList?: boolean;
+  showReadingListButton?: boolean;
 };
 
-export default function LinkedBookDetails({ index, book, email, review, userId }: Props) {
+export default function LinkedBookDetails({ index, book, email, review, userId, showReadingListButton=false}: Props) {
   return (
     <Link href={`/edit/${book.id}`}>
       <div className="hover:bg-green-50">
-        <BookDetails index={index} book={book} email={email} review={review} userId={userId}/>
+        <BookDetails index={index} book={book} email={email} review={review} userId={userId} showReadingListButton={showReadingListButton}/>
       </div>
     </Link>
   );

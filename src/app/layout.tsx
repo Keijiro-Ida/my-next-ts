@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
          <Providers>
-          <h1 className="text-4xl text-indigo-800 font-bold my-2">Reading Recorder</h1>
+          <h1 className="text-4xl text-indigo-800 font-bold my-2">BookLog</h1>
           <AuthMenu />
           <div className="ml-2">
             {children}
