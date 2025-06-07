@@ -7,14 +7,17 @@ import { authOptions } from "@/lib/authOptions";
 
 type Props = {
   params: {
-    keyword?: string;
+    keyword?: string | string[];
   };
 };
 
 export default async function BookResult({ params }: Props) {
-
-  const keyword = params.keyword ?? 'React'
-
+  let keyword: string = "React";
+  if (Array.isArray(params.keyword)) {
+    keyword = params.keyword[0] ?? "React";
+  } else if (typeof params.keyword === "string") {
+    keyword = params.keyword;
+  }
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
