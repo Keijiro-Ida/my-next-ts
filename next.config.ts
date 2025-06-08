@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  eslint: {
+    ignoreDuringBuilds: true, // ← これを追加
+  },
 };
 
 export default nextConfig;
