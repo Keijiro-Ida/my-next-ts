@@ -8,15 +8,7 @@ const prisma = new PrismaClient();
 
 export async function addReview(data: FormData) {
 
-    const email = data.get('email') as string;
-    const user = await prisma.user.findUnique({
-        where: { email: email },
-        select: { id: true }
-    });
-
-    if( !user ) {
-        throw new Error('User not found');
-    }
+    const userId = data.get('userId') as string;
 
     const bookId = data.get('id') as string;
     console.log('Adding review for bookId:', bookId);
@@ -42,7 +34,7 @@ export async function addReview(data: FormData) {
         read: new Date(data.get('read') as string),
         memo: data.get('memo') as string,
         rating: data.get('rating') ? Number(data.get('rating')) : null,
-        userId: user?.id || '',
+        userId: userId || '',
     };
 
     await prisma.review.upsert({
@@ -50,7 +42,7 @@ export async function addReview(data: FormData) {
         create: { ...input },
         where: {
             userId_bookId: {
-            userId: user.id,
+            userId: userId,
             bookId: bookId
             }
         }
@@ -59,18 +51,12 @@ export async function addReview(data: FormData) {
     redirect('/');
 }
 
-export async function removeReview(id: string, email: string) {
-    const user = await prisma.user.findUnique({
-        where: { email: email },
-        select: { id: true }
-    });
-    if (!user) {
-        throw new Error('User not found');
-    }
+export async function removeReview(id: string, userId: string) {
+
     await prisma.review.delete({
         where: {
             userId_bookId: {
-                userId: user.id,
+                userId: userId,
                 bookId: id
             }
         }

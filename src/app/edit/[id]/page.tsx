@@ -32,7 +32,7 @@ export default async function EditPage({ params }: Props) {
       <div id="form">
           <BookDetails book={book} userId={userId} isInReadingList={isInReadingList}/>
           <hr />
-          <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? "", rating: review?.rating ?? null }} />
+          <FormEdit src={{id: book.id, read, memo:review?.memo ?? "",email: session.user?.email ?? "", rating: review?.rating ?? null, userId: userId }} />
       </div>
   )
 }

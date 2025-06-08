@@ -4,20 +4,15 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authOptions";
 
-
 type Props = {
   params: {
-    keyword?: string | string[];
+    keyword?: string;
   };
 };
 
-export default async function BookResult({ params }: Props) {
-  let keyword: string = "React";
-  if (Array.isArray(params.keyword)) {
-    keyword = params.keyword[0] ?? "React";
-  } else if (typeof params.keyword === "string") {
-    keyword = params.keyword;
-  }
+export default async function BookResult({ params: { keyword = 'React'} }: Props) {
+
+
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
@@ -32,7 +27,7 @@ export default async function BookResult({ params }: Props) {
   return (
     <>
       {books.map((b, i) => (
-        <LinkedBookDetails book={b} index={i + 1} key={b.id} userId={userId}  showReadingListButton={true} />
+        <LinkedBookDetails book={b} index={i + 1} key={b.id} userId={userId} />
       ))}
     </>
   );
